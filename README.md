@@ -25,7 +25,7 @@ Add `boot-marginalia` to your `build.boot` dependencies and `require` the namesp
 
 For the complete list of the options `boot marginalia -h`
 
-the resulting html file can be found in `target/docs/uberdoc.html`
+The resulting html file can be found in `target/docs/uberdoc.html`
 
 ## License
 
