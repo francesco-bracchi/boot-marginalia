@@ -16,7 +16,7 @@ Add `boot-marginalia` to your `build.boot` dependencies and `require` the namesp
 
 ```clj
 (set-env! :dependencies '[
-  [it.frbracch/boot-marginalia "0.1.0" :scope "test"]
+  [it.frbracch/boot-marginalia "0.1.1" :scope "test"]
 ])
 
 (require

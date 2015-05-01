@@ -1,18 +1,18 @@
 (def +project+ 'it.frbracch/boot-marginalia)
 
-(def +version+ "0.1.0")
+(def +version+ "0.1.1")
 
-(def +description+ "FIXME")
+(def +description+ "boot plugin for marginalia")
 
 (def +source-paths+ #{"src/clj"})
 
-(def +dependencies+ '[[marginalia "0.8.0"]])
+(def +dependencies+ '[[boot/core           "2.0.0-rc13" :scope "provided"]
+                      [org.clojure/clojure "1.6.0"      :scope "provided"]
+                      [marginalia          "0.8.0"]])
 
 (def +url+ "https://github.com/francesco-bracchi/boot-marginalia")
 
 (def +license+ {"EPL" "http://www.eclipse.org/legal/epl-v10.html"})
-
-(def +clojar+ "https://clojars.org/repo")
 
 (set-env!
  :source-paths +source-paths+
@@ -26,10 +26,8 @@
         :scm         {:url +url+}
         :license     +license+}
   sift {:to-resource #{#".*clj$"}}
-  push {:repo "deploy-clojars"})
-
-(deftask build []
-  (comp (sift) (pom) (jar)))
+  push {:repo "deploy-clojars"
+        :gpg-sign true})
 
 (defn get-username []
   (print "username: ")
@@ -39,13 +37,35 @@
   (print "password: ")
   (apply str (-> (System/console) .readPassword)))
 
-(defn get-credentials []
-  (merge-env! :repositories
-              [["deploy-clojars" {:url "https://clojars.org/repo"
-                                  :username (get-username)
-                                  :password (get-password)}]]))
+(deftask clojars-credentials
+  []
+  (fn [next]
+    (fn [fileset]
+      (boot.util/info "Clojar credentials\n")
+      (merge-env! :repositories
+                  [["deploy-clojars" {:url "https://clojars.org/repo"
+                                      :username (get-username)
+                                      :password (get-password)}]])
+      (println (get-env))
+      (next fileset))))
 
-(deftask deploy []
-  (get-credentials)
-  (print (:repositories (get-env)))
-  (comp (build) (push)))
+(deftask pack
+  "pack file in a jarfile"
+  []
+  (comp (pom) (jar)))
+
+(deftask build
+  "build and pack the jarfile"
+  []
+  (comp (sift) (pack)))
+
+(deftask deploy-clojars
+  "deploy to clojars"
+  []
+  (comp (clojars-credentials) (push)))
+
+(deftask release []
+  (comp (build) (deploy-clojars)))
+
+(deftask local []
+  (comp (build) (install)))
