@@ -21,7 +21,7 @@
    m multi       bool    "Generate each namespace documentation as a separate file"]
   (fn [next]
     (fn [fileset]
-      (let [tgt       (core/temp-dir!)
+      (let [tgt       (core/tmp-dir!)
             dir       (or dir "docs")
             file      (or file "uberdoc.html")
             name      (or name (pom-option :project))
