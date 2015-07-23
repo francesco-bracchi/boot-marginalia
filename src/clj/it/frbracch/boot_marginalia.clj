@@ -7,7 +7,7 @@
             [marginalia.html :refer [*resources*]]))
 
 (defn pom-option [k]
-  (-> builtin/pom var meta k))
+  (-> builtin/pom var meta :task-options k))
 
 (deftask marginalia
   "Run Marginalia against your project source files"
