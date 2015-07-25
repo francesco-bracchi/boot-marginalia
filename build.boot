@@ -6,8 +6,8 @@
 
 (def +source-paths+ #{"src/clj"})
 
-(def +dependencies+ '[[boot/core           "2.0.0-rc13" :scope "provided"]
-                      [org.clojure/clojure "1.6.0"      :scope "provided"]
+(def +dependencies+ '[[boot/core           "2.1.2" :scope "provided"]
+                      [org.clojure/clojure "1.6.0" :scope "provided"]
                       [marginalia          "0.8.0"]])
 
 (def +url+ "https://github.com/francesco-bracchi/boot-marginalia")
