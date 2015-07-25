@@ -1,3 +1,5 @@
+[![Clojars Project](http://clojars.org/it.frbracch/boot-marginalia/latest-version.svg)](http://clojars.org/it.frbracch/boot-marginalia)
+
 # Boot Marginalia
 
 [Boot](https://github.com/boot-clj/boot) plugin for [marginalia](https://fogus.github.io/marginalia/)
@@ -16,7 +18,7 @@ Add `boot-marginalia` to your `build.boot` dependencies and `require` the namesp
 
 ```clj
 (set-env! :dependencies '[
-  [it.frbracch/boot-marginalia "0.1.1" :scope "test"]
+  [it.frbracch/boot-marginalia "0.1.2" :scope "test"]
 ])
 
 (require

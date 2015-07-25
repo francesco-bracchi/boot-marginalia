@@ -1,6 +1,6 @@
 (def +project+ 'it.frbracch/boot-marginalia)
 
-(def +version+ "0.1.1")
+(def +version+ "0.1.2")
 
 (def +description+ "boot plugin for marginalia")
 
