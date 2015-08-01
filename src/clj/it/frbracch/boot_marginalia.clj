@@ -21,7 +21,7 @@
   "get the scope of a dependency according to mvn dependency scope"
   [dep]
   (cond
-    (nil? dep) "compile"
+    (empty? dep) "compile"
     (= (first dep) :scope) (second dep)
     :else (recur (rest dep))))
 
