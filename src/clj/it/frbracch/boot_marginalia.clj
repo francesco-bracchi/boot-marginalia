@@ -1,4 +1,5 @@
 (ns it.frbracch.boot-marginalia
+  "marginalia plugin for the boot build system"
   {:boot/export-tasks true}
   (:require [boot.core :as core :refer [deftask]]
             [boot.util :as util]
@@ -6,8 +7,38 @@
             [marginalia.core :as marg]
             [marginalia.html :refer [*resources*]]))
 
-(defn pom-option [k]
+(defn pom-option
+  "get a value from pom task options"
+  [k]
   (-> builtin/pom var meta :task-options k))
+
+(defn boot-marginalia?
+  "test if a dependency is `boot-marginalia`"
+  [dep]
+  (= (first dep) 'it.frbracch/boot-marginalia))
+
+(defn scope
+  "get the scope of a dependency according to mvn dependency scope"
+  [dep]
+  (cond
+    (nil? dep) "compile"
+    (= (first dep) :scope) (second dep)
+    :else (recur (rest dep))))
+
+(defn development-dep?
+  "test if a dependency is part of the `dev-depenencies` set"
+  [dep]
+  (-> dep scope #{"test" "provided"}))
+
+(defn runtime-dep?
+  "test if a dependency is runtime or not (or is boot-marginalia itself)"
+  [dep]
+  (not (or (boot-marginalia? dep)
+           (development-dep? dep))))
+
+(defn env-dependencies
+  ([] (-> (core/get-env) :dependencies env-dependencies))
+  ([env] (filter runtime-dep? env)))
 
 (deftask marginalia
   "Run Marginalia against your project source files"
@@ -18,7 +49,8 @@
    e desc    VAL str     "Project description - if not given will be taken from pom task options"
    c css     VAL #{str}  "Additional css resources"
    j js      VAL #{str}  "Additional javascript resources"
-   m multi       bool    "Generate each namespace documentation as a separate file"]
+   m multi       bool    "Generate each namespace documentation as a separate file"
+   p deps    VAL edn     "Project dependencies - if not given will be taken from the env, filtering out dependencies in 'test' and 'provided' scopes"]
   (fn [next]
     (fn [fileset]
       (let [tgt       (core/tmp-dir!)
@@ -27,7 +59,7 @@
             name      (or name (pom-option :project))
             version   (or version (pom-option :version))
             desc      (or desc (pom-option :description))
-            deps      (-> (core/get-env) :dependencies)
+            deps      (or deps (env-dependencies))
             full-dir  (str (.getPath tgt) "/" dir)
             full-file (str full-dir "/" file)
             sources   (-> (core/get-env) :source-paths seq marg/format-sources distinct)
