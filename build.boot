@@ -1,6 +1,6 @@
 (def +project+ 'it.frbracch/boot-marginalia)
 
-(def +version+ "0.1.3")
+(def +version+ "0.1.3-1")
 
 (def +description+ "boot plugin for marginalia")
 
@@ -8,7 +8,7 @@
 
 (def +dependencies+ '[[boot/core           "2.1.2" :scope "provided"]
                       [org.clojure/clojure "1.6.0" :scope "provided"]
-                      [marginalia          "0.8.0"]])
+                      [michaelblume/lein-marginalia "0.9.0"]])
 
 (def +url+ "https://github.com/francesco-bracchi/boot-marginalia")
 
