@@ -6,11 +6,17 @@
 
 ## Try
 
-run 
+run
 
 ```bash
-boot -d it.frbracch/boot-marginalia marginalia
+boot -d it.frbracch/boot-marginalia marginalia target
 ```
+
+> **NOTE:**
+> boot versions prior to 2.5.0 [implicitely](https://github.com/boot-clj/boot/wiki/Target-Directory)
+> create the target directory.
+>
+> In this case do not add the `target` task (i.e. `boot -d it.frbracch/boot-marginalia marginalia`)
 
 ## Usage
 
@@ -25,9 +31,13 @@ Add `boot-marginalia` to your `build.boot` dependencies and `require` the namesp
   '[it.frbracch.boot-marginalia :refer [marginalia]])
 ```
 
-For the complete list of the options `boot marginalia -h`
+For the complete options list, type `boot marginalia -h`
 
-The resulting html file can be found in `target/docs/uberdoc.html`
+The resulting html file is placed in `docs/uberdoc.html`.
+
+> NOTE: the fileset containing the document is passed through the rest of the
+> task pipeline, therefore it is not readily present in the project root.
+> Another task (e.g. `target`) should be used.
 
 ## License
 
